@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ChessGame.Core.Models;
+namespace ChessGame.Core.Models.Pieces;
 
 public interface IBoardState
 {
@@ -25,7 +25,7 @@ public abstract class Piece
     public PieceColor Color { get; }
     public Position Position { get; set; }
     public bool HasMoved { get; set; }
-
+    public abstract Piece Clone();
     public abstract IEnumerable<Position> GetPseudoLegalMoves(IBoardState board);
 
     protected IEnumerable<Position> GetRayMoves(IBoardState board, (int dRow, int dCol)[] directions)
@@ -68,6 +68,7 @@ public sealed class Rook : Piece
         (-1, 0), (1, 0), (0, -1), (0, 1)
     ];
 
+    public override Piece Clone() => new Rook(Color, Position);
     public Rook(PieceColor color, Position position)
         : base(PieceType.Rook, color, position) { }
 
@@ -82,6 +83,7 @@ public sealed class Bishop : Piece
         (-1, -1), (-1, 1), (1, -1), (1, 1)
     ];
 
+    public override Piece Clone() => new Bishop(Color, Position);
     public Bishop(PieceColor color, Position position)
         : base(PieceType.Bishop, color, position) { }
 
@@ -96,7 +98,7 @@ public sealed class Queen : Piece
         (-1, 0), (1, 0), (0, -1), (0, 1),
         (-1, -1), (-1, 1), (1, -1), (1, 1)
     ];
-
+    public override Piece Clone() => new Queen(Color, Position);
     public Queen(PieceColor color, Position position)
         : base(PieceType.Queen, color, position) { }
 
@@ -111,7 +113,7 @@ public sealed class Knight : Piece
         (-2, -1), (-2, 1), (-1, -2), (-1, 2),
         (1, -2),  (1, 2),  (2, -1),  (2, 1)
     ];
-
+    public override Piece Clone() => new Knight(Color, Position);
     public Knight(PieceColor color, Position position)
         : base(PieceType.Knight, color, position) { }
 
@@ -137,7 +139,7 @@ public sealed class King : Piece
         (-1, 0), (1, 0), (0, -1), (0, 1),
         (-1, -1), (-1, 1), (1, -1), (1, 1)
     ];
-
+    public override Piece Clone() => new King(Color, Position);
     public King(PieceColor color, Position position)
         : base(PieceType.King, color, position) { }
 
@@ -161,6 +163,7 @@ public sealed class Pawn : Piece
     public Pawn(PieceColor color, Position position)
         : base(PieceType.Pawn, color, position) { }
 
+    public override Piece Clone() => new Pawn(Color, Position);
     public override IEnumerable<Position> GetPseudoLegalMoves(IBoardState board)
     {
         bool movesUp = Color == board.UpwardColor;
